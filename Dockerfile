@@ -2,12 +2,13 @@ FROM node:12-alpine
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN mkdir /bot
-COPY . /bot
-
 WORKDIR /bot
 
-RUN apk add --update tini && \
-	npm install && \
+RUN apk add --update tini
+
+COPY . /bot
+
+RUN npm install && \
 	npm run build && \
 	mkdir /config
 
