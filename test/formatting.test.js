@@ -20,8 +20,32 @@ describe('Formatting', () => {
       formatFromDiscordToIRC('__text__').should.equal('\x1ftext\x1f');
     });
 
-    it('should ignore strikethrough markdown', () => {
-      formatFromDiscordToIRC('~~text~~').should.equal('text');
+    it('should simplify strikethrough markdown', () => {
+      formatFromDiscordToIRC('~~text~~').should.equal('~text~');
+    });
+
+    it('should ignore link markdown', () => {
+      formatFromDiscordToIRC('[text](text)').should.equal('[text](text)');
+    });
+
+    it('should ignore reflink markdown', () => {
+      formatFromDiscordToIRC('[text][text]').should.equal('[text][text]');
+    });
+
+    it('should ignore image markdown', () => {
+      formatFromDiscordToIRC('![text](text)').should.equal('![text](text)');
+    });
+
+    it('should ignore refimage markdown', () => {
+      formatFromDiscordToIRC('![text][text]').should.equal('![text][text]');
+    });
+
+    it('should convert spoilers to red-on-red', () => {
+      formatFromDiscordToIRC('||text||').should.equal('\x0304,04||text||\x03');
+    });
+
+    it('should convert inline code to white-on-black with graves', () => {
+      formatFromDiscordToIRC('`text`').should.equal('\x0300,01`text`\x03');
     });
 
     it('should convert nested markdown', () => {
